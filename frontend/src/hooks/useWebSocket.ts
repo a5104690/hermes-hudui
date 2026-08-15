@@ -22,13 +22,14 @@ const HEALTH_DEBOUNCE_MS = 750
 const HEALTH_MIN_REFRESH_MS = 3000
 
 export function useWebSocket(): UseWebSocketReturn {
-  const [status, setStatus] = useState<WebSocketStatus>('disconnected')
+  const [status, setStatus] = useState<WebSocketStatus>('connecting')
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null)
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const reconnectAttemptsRef = useRef(0)
   const healthRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastHealthRefreshRef = useRef(0)
+  const connectRef = useRef<() => void>(() => {})
 
   const revalidateHealth = useCallback(() => {
     if (document.visibilityState === 'hidden') return
@@ -60,8 +61,6 @@ export function useWebSocket(): UseWebSocketReturn {
   const connect = useCallback(() => {
     if (wsRef.current?.readyState === WebSocket.OPEN) return
 
-    setStatus('connecting')
-    
     const ws = new WebSocket(WS_URL)
     wsRef.current = ws
 
@@ -150,7 +149,8 @@ export function useWebSocket(): UseWebSocketReturn {
       reconnectAttemptsRef.current++
       
       reconnectTimeoutRef.current = setTimeout(() => {
-        connect()
+        setStatus('connecting')
+        connectRef.current()
       }, delay)
     }
 
@@ -164,6 +164,10 @@ export function useWebSocket(): UseWebSocketReturn {
       wsRef.current.send(data)
     }
   }, [])
+
+  useEffect(() => {
+    connectRef.current = connect
+  }, [connect])
 
   useEffect(() => {
     connect()
