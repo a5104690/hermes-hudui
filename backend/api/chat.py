@@ -118,6 +118,15 @@ async def end_session(session_id: str) -> dict[str, str]:
     raise HTTPException(status_code=404, detail="Session not found")
 
 
+@router.get("/sessions/{session_id}/message")
+async def get_messages(session_id: str) -> list[dict]:
+    """Return message history for a session (stored in localStorage on frontend)."""
+    session = chat_engine.get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return []
+
+
 @router.post("/sessions/{session_id}/message")
 async def send_and_stream(
     session_id: str, request: AISDKSendRequest

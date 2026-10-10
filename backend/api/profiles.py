@@ -2,10 +2,19 @@
 
 from __future__ import annotations
 
-import fcntl
 import os
 import re
+import sys
 import tempfile
+
+if sys.platform == "win32":
+    import msvcrt
+    def _flock_ex(f):
+        msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+else:
+    import fcntl
+    def _flock_ex(f):
+        fcntl.flock(f, fcntl.LOCK_EX)
 from pathlib import Path
 from typing import Any
 
@@ -133,7 +142,7 @@ def _with_profile_lock(profile_dir: Path, fn):
     lock_path = profile_dir / ".hud-profile-edit.lock"
     lock_path.touch(exist_ok=True)
     with open(lock_path, "r", encoding="utf-8") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
+        _flock_ex(lock)
         return fn()
 
 

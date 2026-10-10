@@ -1,0 +1,135 @@
+INFO:     Started server process [18892]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:3001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58524 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58525 - "GET /api/chat/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63816 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63816 - "GET /assets/index-CAlkQqLN.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65454 - "GET /assets/index-Cj9mg3-8.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63816 - "GET /api/dashboard HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+OSError: [WinError 87] 參數錯誤。
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\uvicorn\protocols\http\httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\uvicorn\middleware\proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\applications.py", line 1160, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\routing.py", line 119, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\routing.py", line 105, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\routing.py", line 431, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\fastapi\routing.py", line 313, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\api\dashboard.py", line 132, in get_dashboard
+    gateway = collect_gateway_status()
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\collectors\gateway.py", line 246, in collect_gateway_status
+    return get_cached_or_compute(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\cache.py", line 195, in get_cached_or_compute
+    result = compute_fn()
+             ^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\collectors\gateway.py", line 248, in <lambda>
+    compute_fn=lambda: _do_collect_gateway(hermes_path),
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\collectors\gateway.py", line 233, in _do_collect_gateway
+    pid_alive=_pid_alive(pid),
+              ^^^^^^^^^^^^^^^
+  File "C:\Users\a5104\hermes-hudui\backend\collectors\gateway.py", line 73, in _pid_alive
+    os.kill(int(pid), 0)
+SystemError: <built-in function kill> returned a result with an exception set
+INFO:     127.0.0.1:53907 - "WebSocket /ws" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:65454 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64513 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65454 - "GET /api/claude-usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65454 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65454 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65454 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56496 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57159 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49538 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49538 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49538 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60944 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60944 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58548 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61007 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57983 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49580 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49580 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59572 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59572 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59572 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60495 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50953 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57645 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51003 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64400 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64400 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58744 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58744 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50272 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50769 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50769 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51193 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53532 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64182 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57396 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50901 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50901 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61698 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61698 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50771 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55534 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65255 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65255 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54254 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54937 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60105 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54834 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54834 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60268 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50380 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50380 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60402 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     connection closed

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import csv
+import io
 import os
 import re
 import sqlite3
@@ -109,6 +111,7 @@ class AgentsState:
 AGENT_PROCESSES = [
     ("hermes", "hermes"),
     ("claude", "claude"),
+    ("agy", "agy"),
     ("codex", "codex"),
     ("opencode", "opencode"),
     ("llama-server", "llama-server"),
@@ -294,10 +297,38 @@ def _get_process_info_macos(name: str, binary: str) -> list[AgentProcess]:
         return agents
 
 
+def _get_process_info_windows(name: str, binary: str) -> list[AgentProcess]:
+    """Find matching Windows processes using tasklist's machine-readable CSV."""
+    agents: list[AgentProcess] = []
+    try:
+        result = subprocess.run(
+            ["tasklist", "/FO", "CSV", "/NH"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=5,
+        )
+        target = f"{binary.lower()}.exe" if not binary.lower().endswith(".exe") else binary.lower()
+        for row in csv.reader(io.StringIO(result.stdout)):
+            if len(row) < 2 or row[0].strip().lower() != target:
+                continue
+            try:
+                pid = int(row[1].strip())
+            except ValueError:
+                continue
+            agents.append(AgentProcess(name=name, binary=binary, running=True, pid=pid))
+        return agents or [AgentProcess(name=name, binary=binary, running=False)]
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError, UnicodeError):
+        return [AgentProcess(name=name, binary=binary, running=False)]
+
+
 def _get_process_info(name: str, binary: str) -> list[AgentProcess]:
     """Find all processes matching the binary name. Dispatches by platform."""
     if sys.platform == "darwin":
         return _get_process_info_macos(name, binary)
+    if sys.platform == "win32":
+        return _get_process_info_windows(name, binary)
     return _get_process_info_linux(name, binary)
 
 

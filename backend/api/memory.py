@@ -2,9 +2,18 @@
 
 from __future__ import annotations
 
-import fcntl
 import os
+import sys
 import tempfile
+
+if sys.platform == "win32":
+    import msvcrt
+    def _flock_ex(f):
+        msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+else:
+    import fcntl
+    def _flock_ex(f):
+        fcntl.flock(f, fcntl.LOCK_EX)
 from pathlib import Path
 from typing import Literal
 
@@ -72,7 +81,7 @@ def _with_lock(target: MemoryTarget, fn):
     lock.parent.mkdir(parents=True, exist_ok=True)
     lock.touch(exist_ok=True)
     with open(lock, "r") as lf:
-        fcntl.flock(lf, fcntl.LOCK_EX)
+        _flock_ex(lf)
         return fn()
 
 
